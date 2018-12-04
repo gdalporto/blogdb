@@ -1,0 +1,10 @@
+language: node_js
+node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: P16UYXuKocSROJTTyJ5z1rrUsWw44Rmw9+jjF3KUFJlzEy4cQMupuhOxeMczPnjOmnQTBEqYl/gCqCE48mpQGMurcqaIWre1Dziq9/sYRkA+DP4AKpd2ZfdZE/wH0XEcSPpoe66wUyT8XJ2wJCR2s5eyutZvnqzFh8NPZqMJEcs2fdv3sBKrQD25spwWN5QDZvQ3NVG9+vwpjtW62Bkyx9Fs/dxFM379K6HtZHBozOSOrXgKpwMRGUfQ773/fRmqkwtn24a/hKCdwIEmi1Ztc7LTlGx7/MagxCH5QxHT9RlP5zRHe8v0yvC+mRoppi3gxtLW3L/k1HYgEVkctw2O9LGnh5EmiHGVicVmGleKq1qoB+AhvmwF+S2RntwCkAtSfMOybdTpcJc91n9jD2jL7Csf0ZJKDDu31q4E58xP8Qin8418Zsn0GVqdxeFNbp6V6trD6mcqIdKrsaX5TTvBg6/7d+DRTdKLshmfuE+K88nvZckxMiQIJ8BViUXDXyUrWq5swFwuaTHzedv0sDMjqkoIn7DiidbZnf7oeCA5wTxY1FK3jQDWfU5zoX+QD3Bfkc9uQnQb10MWhrNh5Oc5PRVoQdB4JxnkVmL1rg0zwKTMMNFdIXxnW8lpHsl6uU4sgHZfCXsxJTDLM5GWwH+jcp1XSYK2ambMEZ37L2Z+gL8=
+  app: https://damp-springs-49422.herokuapp.com/
+  on:
+    repo: gdalporto/blogPost
+    branch: test-blogPost/testBlogPost

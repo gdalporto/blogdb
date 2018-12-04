@@ -11,14 +11,14 @@ BlogPosts.create("Second Blog Post", "This is the CMS' second blog post", "Gabe"
 
 router.get('/',(req,res)=>{
     const item = BlogPosts.get(req.params.id);
-    res.status(201).json(item);
+    res.status(200).json(item);
 });
 
 
 router.delete('/:id',(req,res)=>{
     const item = BlogPosts.delete(req.params.id);
     console.log(`Deleted item id ${req.params.id}`);
-    res.status(201).send(item);
+    res.status(204).send(item);
 });
 
 
@@ -31,11 +31,7 @@ router.post('/',(req,res)=>{
             return res.status(400).send(errMsg);
         };
     };
-    const item = BlogPosts.create({
-        title: req.body.title,
-        content: req.body.content, 
-        author: req.body.author, 
-        pusblishDate: req.body.publishDate || null });
+    const item = BlogPosts.create(req.body.title, req.body.content, req.body.author, req.body.publishDate) 
     res.status(201).json(item);
 });
 
@@ -59,17 +55,13 @@ router.put('/:id',(req,res)=>{
     }
   
     console.log(`updateing blog post list for id ${req.body.id}`);
-    const item=BlogPosts.update(
-//        {
-        req.body
-//        id: req.body.id,
-//        title: req.body.title,
-//        content: req.body.content,
-//        author: req.body.author,
-//        publishDate: req.body.publishDate
-//    }
-);
-    return res.status(204).json(item);  
+    const item=BlogPosts.update({
+        id: req.body.id, 
+        title: req.body.title, 
+        content: req.body.content, 
+        author: req.body.author, 
+        publishDate: req.body.publishDate});
+    return res.status(200).json(item);  
   });
 
 module.exports = router;
