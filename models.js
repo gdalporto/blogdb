@@ -1,18 +1,18 @@
 "use strict";
 
-const uuid = require('uuid');
-
 const mongoose = require('mongoose');
+
+mongoose.Promise=global.Promise;
 
 // Schema to represent a blog post
 const blogSchema = mongoose.Schema({
-  _id: {type: String, required: true},
   title: {type: String, required: true},
   author: {
     firstName: String, 
     lastName: String
   },
   content: {type: String, required: true},
+  created: {type:Date, default: Date.now}
 });
 
 // define "virtual" to represent first and last name concatentated together.
@@ -30,7 +30,8 @@ blogSchema.methods.serialize = function () {
     id: this._id,
     title: this.title,
     content: this.content,
-    author: this.authorString
+    author: this.authorString,
+    created: this.created
   };
 };
 

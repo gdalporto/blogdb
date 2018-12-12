@@ -14,8 +14,6 @@ mongoose.Promise = global.Promise;
 const {PORT, DATABASE_URL} = require('./config');
 const {BlogPosts} = require('./models');
 
-const uuid = require('uuid');
-
 // bring in parsing function
 app.use(express.json());
 
@@ -40,9 +38,7 @@ app.get("/blog-posts/:id", (req,res)=>{
     BlogPosts
  //       .find({_id:`ObjectId("${req.params.id}")`})
         .findById(req.params.id)
-        .then(blogposts => {
-            res.json(blogposts.serialize());
-        })
+        .then(blogpost => res.json(blogpost.serialize()))
         .catch(err => {
             console.error(err);
             res.status(500).json({message: "Internal server error"});
@@ -56,27 +52,26 @@ app.post("/blog-posts", (req, res)=>{
             const message = `Missing \`${requiredFields[i]}\` in request body`;
             console.error(message);
             return res.status(400).send(message);
-
-        };
+        }
         console.log(i);
-    };
-    BlogPosts.create({
-//        id: uuid.v4(),
-        title: req.body.title,
-        author: req.body.author,
-        content: req.body.content 
+    }
+    BlogPosts
+        .create({
+            title: req.body.title,
+            author: req.body.author,
+            content: req.body.content 
     })
     .then(blogpost => res.status(201).json(blogpost.serialize()))
     .catch(err=>{
         console.error(err);
         res.status(500).json({message: "Internal server error"});
-    })
-})
+    });
+});
 
 app.put("/blog-posts/:id",(req,res)=>{
     // check that the id in params and body are the same 
     // and that it exists in the db
-    if(!(req.params.id===req.body.id)) {
+    if(!(req.params.id && req.body.id && req.params.id === req.body.id)) {
         const message = `Error: Parameter id:${req.params.id} must equal body id: ${req.body.id}`
         console.error(message);
         return res.status(400).json({message: message});
@@ -90,21 +85,23 @@ app.put("/blog-posts/:id",(req,res)=>{
         }
     });
 
-    BlogPosts.findByIdAndUpdate({id: req.params.id}, {$set: toUpdate})
-        .then(restaurant => res.status(204).end())
+    BlogPosts
+        .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+        .then(newBlogPost => res.status(204).end())
         .catch(err => res.status(500).json({message: "Internal server error."}));
 });
 
 app.delete("/blog-posts/:id",(req,res) => {
-    BlogPosts.findByIdAndRemove({id:req.params.id})
-        .then(blogpost => res.status(204).end())
-        .catch(err => res.status(500).json({message:"Internal server error"}))
+    BlogPosts
+        .findByIdAndRemove(req.params.id)
+        .then(blogpost => res.status(204).json({message:"success"}))
+        .catch(err => res.status(500).json({message:"Internal server error"}));
 });
 
 // catch - all endpoint
 app.use("*", function(req,res){
-    res.status(400).json({message:"Not Found"});
-})
+    res.status(404).json({message:"Not Found"});
+});
 
 
 // Create server object to be opened / closed.
