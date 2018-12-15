@@ -39,9 +39,13 @@ app.get("/authors", (req,res)=>{
     Authors.find()
         .limit(10)
         .then(authors => {
-            res.json({
-                authors: authors.map(authors => authors.serialize())
-            });
+            res.json(authors.map(author => {
+              return {
+                id: author._id,
+                name: `${author.firstName} ${author.lastName}`,
+                userName: author.userName
+              };
+            }));
         })
         .catch(err => {
             console.error(err);
